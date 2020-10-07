@@ -168,7 +168,7 @@ field when `count` has a value of `0`). Lastly, the spec indicates that
 #### `relation`
 
 ```
-`jsonapi:"relation,<key name in relationships hash>,<optional: omitempty>"`
+`jsonapi:"relation,<key name in relationships hash>,<optional: optional>,<optional: omitempty>"`
 ```
 
 Relations are struct fields that represent a one-to-one or one-to-many
@@ -178,6 +178,8 @@ be, `relation`, and the second should be the name of the relationship,
 used as the key in the `relationships` hash for the record. The optional
 third argument is `omitempty` - if present will prevent non existent to-one and
 to-many from being serialized.
+
+If the tag optional is included in the parsing. This relation may have multiple situations. It is allowed that the primary key is not equal to the data tag. If not, the parsing will be skipped
 
 ## Methods Reference
 
@@ -344,7 +346,7 @@ func (post Post) JSONAPIRelationshipMeta(relation string) *Meta {
 	}
 	return nil
 }
-```
+ ```
 
 ### Custom types
 

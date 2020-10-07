@@ -29,7 +29,8 @@ var (
 	ErrUnknownFieldNumberType = errors.New("The struct field was not of a known number type")
 	// ErrInvalidType is returned when the given type is incompatible with the expected type.
 	ErrInvalidType = errors.New("Invalid type provided") // I wish we used punctuation.
-
+	//跳过
+	ErrBreak = errors.New("break")
 )
 
 // ErrUnsupportedPtrType is returned when the Struct field was a pointer but
@@ -182,9 +183,10 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 			// Check the JSON API Type
 			if data.Type != args[1] {
 				er = fmt.Errorf(
-					"Trying to Unmarshal an object of type %#v, but %#v does not match",
+					"Trying to Unmarshal an object of type %#v, but %#v does not match;And not %w",
 					data.Type,
 					args[1],
+					ErrBreak,
 				)
 				break
 			}
@@ -276,11 +278,16 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 				for _, n := range data {
 					m := reflect.New(fieldValue.Type().Elem().Elem())
 
-					if err := unmarshalNode(
+					err := unmarshalNode(
 						fullNode(n, included),
 						m,
 						included,
-					); err != nil {
+					)
+					if errors.Is(err, ErrBreak) && strings.Contains(tag, annotationOptional) {
+						err = nil
+						continue
+					}
+					if err != nil {
 						er = err
 						break
 					}
