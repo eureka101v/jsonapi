@@ -8,6 +8,8 @@ const (
 	annotationAttribute = "attr"
 	annotationRelation  = "relation"
 	annotationOmitEmpty = "omitempty"
+	//代表由多个选项，允许tag不匹配，不匹配则跳过
+	annotationOptional  = "optional"
 	annotationISO8601   = "iso8601"
 	annotationSeperator = ","
 
