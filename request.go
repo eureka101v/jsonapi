@@ -381,8 +381,6 @@ func assignValue(field, value reflect.Value) {
 		field.SetString(value.String())
 	case reflect.Bool:
 		field.SetBool(value.Bool())
-	case reflect.Slice:
-		field.Set(reflect.MakeSlice(field.Type(), field.Len(), field.Cap()))
 	default:
 		field.Set(value)
 	}
@@ -397,7 +395,9 @@ func unmarshalAttribute(
 	fieldType := structField.Type
 
 	// Handle field of type []string
-	if fieldValue.Type() == reflect.TypeOf([]string{}) {
+	//if fieldValue.Type() == reflect.TypeOf([]string{}) {
+	if fieldValue.Type().Kind() == reflect.Slice &&
+		reflect.TypeOf(fieldValue.Interface()).Elem().Kind() == reflect.String {
 		value, err = handleStringSlice(attribute)
 		return
 	}
