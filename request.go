@@ -374,6 +374,8 @@ func assignValue(field, value reflect.Value) {
 		field.SetString(value.String())
 	case reflect.Bool:
 		field.SetBool(value.Bool())
+	case reflect.Slice:
+		field.Set(reflect.MakeSlice(field.Type(), field.Len(), field.Cap()))
 	default:
 		field.Set(value)
 	}
