@@ -381,9 +381,6 @@ func assignValue(field, value reflect.Value) {
 		field.SetString(value.String())
 	case reflect.Bool:
 		field.SetBool(value.Bool())
-	case reflect.Slice:
-		li := value.Elem()
-		field = reflect.Append(field, li)
 	default:
 		field.Set(value)
 	}
